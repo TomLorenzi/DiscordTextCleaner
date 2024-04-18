@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, Collection } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -6,6 +6,7 @@ module.exports = {
 		.setDescription('Clean tout le texte du channel')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
+        await interaction.deferReply({ ephemeral: true });
         const channel = interaction.channel;
         const messages = await fetchMore(channel, 1000);
         for (const message of messages.values()) {
@@ -13,7 +14,7 @@ module.exports = {
                 await message.delete();
             }
         }
-		await interaction.reply({content: 'Le texte a été nettoyé !', ephemeral: true});
+		await interaction.editReply('Texte nettoyé !');
 	},
 };
 
